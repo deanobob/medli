@@ -94,7 +94,7 @@ void EntityManager::merge(Entity* pEntity)
   unsigned int componentMask = pEntity->getComponentMask();
   for (auto i = this->componentMaskMap_.begin(); i != this->componentMaskMap_.end(); ++i)
   {
-    if ((componentMask & (*i).first) == componentMask)
+    if ((componentMask & (*i).first) == (*i).first)
     {
       (*i).second.push_back(pEntity);
 
