@@ -22,7 +22,7 @@ class Subsystem :
     Subsystem(short typeId, const unsigned int componentMask, short updatePriority = 0, short drawPriority = 0);
     virtual ~Subsystem();
 
-    virtual unsigned short getTypeId() const;
+    unsigned short getTypeId() const;
 
     void initialise();
     void load();
