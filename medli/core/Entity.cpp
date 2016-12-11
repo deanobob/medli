@@ -6,8 +6,8 @@
  */
 
 #include <assert.h>
+#include "Component.h"
 #include "Entity.h"
-#include "IComponent.h"
 
 unsigned int Entity::nextId_ = 1;
 
@@ -22,15 +22,17 @@ Entity::~Entity()
 
 }
 
-void Entity::addComponent(IComponent* pComponent)
+void Entity::addComponent(Component* pComponent)
 {
   assert (this->componentMap_.find(pComponent->id) == this->componentMap_.end());
 
   this->componentMask_ |= pComponent->id;
   this->componentMap_[pComponent->id] = pComponent;
+
+  pComponent->setEntity(this);
 }
 
-IComponent* Entity::getComponent(unsigned int componentId)
+Component* Entity::getComponent(unsigned int componentId)
 {
   return this->componentMap_[componentId];
 }
@@ -38,4 +40,12 @@ IComponent* Entity::getComponent(unsigned int componentId)
 const unsigned int Entity::getComponentMask() const
 {
   return this->componentMask_;
+}
+
+void Entity::sendMessage(const Message* pMessage)
+{
+  for (std::pair<unsigned int, Component*> c : this->componentMap_)
+  {
+    c.second->handleMessage(pMessage);
+  }
 }

@@ -32,7 +32,7 @@ unsigned short Subsystem::getTypeId() const
 
 void Subsystem::initialise()
 {
-  this->initialise();
+  this->onInitialise();
 }
 
 void Subsystem::load()
