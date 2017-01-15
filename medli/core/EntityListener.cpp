@@ -33,6 +33,8 @@ void EntityListener::refreshEntityList()
 {
   this->entityList_ = this->pEntityManager_->getAll(this->componentMask);
   this->entityListHasChanged_ = false;
+
+  this->onEntityListChanged();
 }
 
 void EntityListener::entityListHasChanged()
@@ -43,4 +45,9 @@ void EntityListener::entityListHasChanged()
 Entity* EntityListener::getEntity(const unsigned int id) const
 {
   return this->pEntityManager_->getEntity(id);
+}
+
+void EntityListener::onEntityListChanged()
+{
+
 }

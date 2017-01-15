@@ -25,6 +25,8 @@ class EntityListener
     void entityListHasChanged();
     Entity* getEntity(const unsigned int id) const;
 
+    virtual void onEntityListChanged();
+
   protected:
     bool entityListHasChanged_;
     std::list<Entity*> entityList_;

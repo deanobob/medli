@@ -6,6 +6,7 @@
  */
 
 #include "../utilities/MedliRectangle.h"
+#include "../utilities/PolygonShape.h"
 #include "Point.h"
 #include "Vector2.h"
 
@@ -30,6 +31,11 @@ MedliRectangle::~MedliRectangle()
 
 }
 
+Vector2 MedliRectangle::getPosition() const
+{
+  return Vector2(this->X, this->Y);
+}
+
 int MedliRectangle::getLeft() const
 {
   return this->X;
@@ -50,12 +56,17 @@ int MedliRectangle::getBottom() const
   return this->Y + this->Height;
 }
 
-int MedliRectangle::getCenterX() const
+Vector2 MedliRectangle::getCentre() const
+{
+  return Vector2(this->getCentreX(), this->getCentreY());
+}
+
+int MedliRectangle::getCentreX() const
 {
   return this->X + (this->Width / 2);
 }
 
-int MedliRectangle::getCenterY() const
+int MedliRectangle::getCentreY() const
 {
   return this->Y + (this->Height / 2);
 }
@@ -90,6 +101,24 @@ bool MedliRectangle::contains(const MedliRectangle& value) const
           (value.X + value.Width) <= (this->X + this->Width) &&
           value.Y >= this->Y &&
           (value.Y + value.Height) <= (this->Y + this->Height));
+}
+
+bool MedliRectangle::intersects(const MedliRectangle& value) const
+{
+  return !(value.X > this->X + this->Width ||
+           value.X + value.Width < this->X ||
+           value.Y > this->Y + this->Height ||
+           value.Y + value.Height < this->Y);
+}
+
+IShape* MedliRectangle::getShape() const
+{
+  PolygonShape* pShape = new PolygonShape();
+  pShape->addVertex(Vector2(this->X, this->Y));
+  pShape->addVertex(Vector2(this->X, this->Y + this->Height));
+  pShape->addVertex(Vector2(this->X + this->Width, this->Y + this->Height));
+  pShape->addVertex(Vector2(this->X + this->Width, this->Y));
+  return pShape;
 }
 
 bool MedliRectangle::operator== (const MedliRectangle& rhs) const
