@@ -8,12 +8,14 @@
 #ifndef CORE_MESSAGE_H_
 #define CORE_MESSAGE_H_
 
+#include <string>
+
 class Message
 {
   public:
-    const unsigned int messageId;
+    const std::string messageId;
 
-    Message(unsigned int messageId);
+    Message(const std::string& messageId);
     virtual ~Message();
 };
 

@@ -8,6 +8,7 @@
 #ifndef SRC_MEDLIGAME_H_
 #define SRC_MEDLIGAME_H_
 
+#include "core/Broadcaster.h"
 #include "core/GameTime.h"
 #include "core/SceneManager.h"
 #include "graphics/DrawEngine.h"
@@ -16,6 +17,7 @@
 class MedliGame
 {
   public:
+    Broadcaster* pBroadcaster;
     DrawEngine* pDrawEngine;
     ResourceManager* pResourceManager;
     SceneManager* pSceneManager;

@@ -91,12 +91,12 @@ Projection PolygonShape::project(const Vector2& position, const Vector2& axis) c
 {
   if (this->vertexList_.size() <= 0) return Projection(0, 0);
 
-  double min = Vector2::dot(axis, position + this->vertexList_.at(0));
+  double min = Vector2::dot(axis, position + this->vertexList_.at(0) - this->minVector_);
   double max = min;
 
   for (unsigned int i = 1; i < this->vertexList_.size(); i++)
   {
-    double p = Vector2::dot(axis, position + this->vertexList_.at(i));
+    double p = Vector2::dot(axis, position + this->vertexList_.at(i) - this->minVector_);
     if (p < min)
     {
       min = p;

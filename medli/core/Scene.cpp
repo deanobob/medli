@@ -11,7 +11,8 @@
 #include "GameTime.h"
 #include "Scene.h"
 
-Scene::Scene(MedliGame* pGame)
+Scene::Scene(MedliGame* pGame, const std::string id) :
+    id_(id)
 {
   this->pGame_ = pGame;
   this->pCameraCollection_ = new CameraCollection();
@@ -24,6 +25,11 @@ Scene::~Scene()
 {
   delete this->pCameraCollection_;
   delete this->pDrawManager_;
+}
+
+const std::string& Scene::getId() const
+{
+  return this->id_;
 }
 
 void Scene::internalInitialise()

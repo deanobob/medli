@@ -11,8 +11,8 @@
 #include "Subsystem.h"
 #include "SubsystemCollection.h"
 
-ComponentScene::ComponentScene(MedliGame* pGame) :
-    Scene(pGame)
+ComponentScene::ComponentScene(MedliGame* pGame, const std::string& id) :
+    Scene(pGame, id)
 {
   this->isInitialised_ = false;
   this->isLoaded_ = false;

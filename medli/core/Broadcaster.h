@@ -12,8 +12,8 @@
 #include <list>
 #include <map>
 
-class Event;
 class IBroadcastListener;
+class Message;
 
 class Broadcaster
 {
@@ -21,12 +21,12 @@ class Broadcaster
     Broadcaster();
     virtual ~Broadcaster();
 
-    void listenFor(unsigned int messageId, IBroadcastListener* pListener);
-    void stopListeningFor(unsigned int messageId, IBroadcastListener* pListener);
-    void send(Event* pEvent);
+    void listenFor(const std::string messageId, IBroadcastListener* pListener);
+    void stopListeningFor(const std::string messageId, IBroadcastListener* pListener);
+    void send(Message* pMessage);
 
   private:
-    std::map<unsigned int, std::list<IBroadcastListener*> > listenerMap_;
+    std::map<const std::string, std::list<IBroadcastListener*> > listenerMap_;
 };
 
 #endif /* BROADCASTER_H_ */

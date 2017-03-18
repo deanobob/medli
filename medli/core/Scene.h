@@ -20,8 +20,10 @@ class MedliGame;
 class Scene
 {
 	public:
-    Scene(MedliGame* pGame);
+    Scene(MedliGame* pGame, const std::string id);
 		virtual ~Scene();
+
+		const std::string& getId() const;
 
 		void internalInitialise();
 		void internalLoad();
@@ -44,14 +46,17 @@ class Scene
 		CameraCollection* pCameraCollection_;
     DrawManager* pDrawManager_;
 		MedliGame* pGame_;
-    bool isEnabled_;
-		bool isVisible_;
 
     virtual void initialise() = 0;
     virtual void load() = 0;
     virtual void update(const GameTime& gameTime) = 0;
     virtual void draw(const GameTime& gameTime) = 0;
     virtual void unload() = 0;
+
+	private:
+    const std::string id_;
+    bool isEnabled_;
+    bool isVisible_;
 };
 
 #endif /* ISCENE_H_ */

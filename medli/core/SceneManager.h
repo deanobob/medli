@@ -8,7 +8,7 @@
 #ifndef SCENEMANAGER_H_
 #define SCENEMANAGER_H_
 
-#include <vector>
+#include <map>
 #include "IBroadcastListener.h"
 
 class MedliGame;
@@ -30,11 +30,11 @@ class SceneManager :
 
     void addScene(Scene* pScene);
 
-    void onMessageBroadcast(Event* pEvent);
+    void onMessageBroadcast(Message* pMessage);
 
   private:
+    std::map<std::string, Scene*> sceneMap_;
     MedliGame* pGame_;
-    std::vector<Scene*> sceneList_;
 };
 
 #endif /* SCENEMANAGER_H_ */

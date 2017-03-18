@@ -161,8 +161,8 @@ void DrawEngine::drawBitmap(BitmapTemplate* pTemplate)
 {
   float imageWidth = al_get_bitmap_width(pTemplate->Bitmap);
   float imageHeight = al_get_bitmap_height(pTemplate->Bitmap);
-  float centreX = (imageWidth / 2.0f);
-  float centreY = (imageHeight / 2.0f);
+  float centreX = imageWidth / 2.0f;
+  float centreY = imageHeight / 2.0f;
 
   al_draw_scaled_rotated_bitmap(pTemplate->Bitmap,
                                 centreX,

@@ -24,7 +24,7 @@ class ComponentScene :
   public:
     EntityManager entityManager;
 
-    ComponentScene(MedliGame* pGame);
+    ComponentScene(MedliGame* pGame, const std::string& id);
     virtual ~ComponentScene();
 
     void addSubsystem(Subsystem* pSubsystem);

@@ -7,7 +7,7 @@
 
 #include "Message.h"
 
-Message::Message(unsigned int messageId) :
+Message::Message(const std::string& messageId) :
     messageId(messageId)
 {
 

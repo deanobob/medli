@@ -10,7 +10,7 @@
 
 #include <stdlib.h>
 
-class Event;
+class Message;
 
 class IBroadcastListener
 {
@@ -20,7 +20,7 @@ class IBroadcastListener
 
     }
 
-    virtual void onMessageBroadcast(Event* pEvent) = 0;
+    virtual void onMessageBroadcast(Message* pMessage) = 0;
 };
 
 #endif /* BROADCASTLISTENER_H_ */

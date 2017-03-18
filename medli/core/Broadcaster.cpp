@@ -6,8 +6,8 @@
  */
 
 #include "Broadcaster.h"
-#include "Event.h"
 #include "IBroadcastListener.h"
+#include "Message.h"
 
 Broadcaster::Broadcaster()
 {
@@ -19,22 +19,22 @@ Broadcaster::~Broadcaster()
 
 }
 
-void Broadcaster::listenFor(unsigned int messageId, IBroadcastListener* pListener)
+void Broadcaster::listenFor(const std::string messageId, IBroadcastListener* pListener)
 {
   this->listenerMap_[messageId].push_back(pListener);
 }
 
-void Broadcaster::stopListeningFor(unsigned int messageId, IBroadcastListener* pListener)
+void Broadcaster::stopListeningFor(const std::string messageId, IBroadcastListener* pListener)
 {
   this->listenerMap_[messageId].remove(pListener);
 }
 
-void Broadcaster::send(Event* pEvent)
+void Broadcaster::send(Message* pMessage)
 {
-  auto listenerList = this->listenerMap_[pEvent->getMessageId()];
+  auto listenerList = this->listenerMap_[pMessage->messageId];
 
   for (auto listener : listenerList)
   {
-    listener->onMessageBroadcast(pEvent);
+    listener->onMessageBroadcast(pMessage);
   }
 }

@@ -7,16 +7,16 @@
 
 #include <cmath>
 #include "../core/Broadcaster.h"
-#include "../core/Event.h"
+#include "../core/Message.h"
 #include "../graphics/GraphicsProperties.h"
+#include "../input/JoypadAxisMessage.h"
+#include "../input/JoypadMessage.h"
+#include "../input/KeyboardMessage.h"
+#include "../input/MouseAxesMessage.h"
+#include "../input/MouseClickMessage.h"
 #include "../log/Logger.h"
 #include "InputManager.h"
-#include "JoypadAxisEvent.h"
-#include "JoypadEvent.h"
-#include "KeyboardEvent.h"
 #include "KeyboardState.h"
-#include "MouseAxesEvent.h"
-#include "MouseClickEvent.h"
 
 InputManager InputManager::InputManager_;
 
@@ -64,12 +64,12 @@ void InputManager::registerEventSource(ALLEGRO_EVENT_SOURCE* pSource)
   }
 }
 
-void InputManager::listeningFor(MessageType messageId, IBroadcastListener* pBroadcastListener)
+void InputManager::listeningFor(const std::string& messageId, IBroadcastListener* pBroadcastListener)
 {
   InputManager_.pBroadcaster_->listenFor(messageId, pBroadcastListener);
 }
 
-void InputManager::stopListeningFor(MessageType messageId, IBroadcastListener* pBroadcastListener)
+void InputManager::stopListeningFor(const std::string& messageId, IBroadcastListener* pBroadcastListener)
 {
   InputManager_.pBroadcaster_->stopListeningFor(messageId, pBroadcastListener);
 }
@@ -84,18 +84,18 @@ void InputManager::update()
     {
       InputManager_.pKeyboardState_->setKeyDown(event.keyboard.keycode);
 
-      KeyboardEvent e = KeyboardEvent(KeyboardStateChanged,
-                                      event.keyboard.keycode,
-                                      true);
+      KeyboardMessage e = KeyboardMessage(MessageId::KEYBOARD_STATE_CHANGED,
+                                          event.keyboard.keycode,
+                                          true);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_KEY_UP)
     {
       InputManager_.pKeyboardState_->setKeyUp(event.keyboard.keycode);
 
-      KeyboardEvent e = KeyboardEvent(KeyboardStateChanged,
-                                      event.keyboard.keycode,
-                                      false);
+      KeyboardMessage e = KeyboardMessage(MessageId::KEYBOARD_STATE_CHANGED,
+                                          event.keyboard.keycode,
+                                          false);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_JOYSTICK_AXIS)
@@ -104,49 +104,49 @@ void InputManager::update()
                                                  event.joystick.axis,
                                                  event.joystick.pos);
 
-      JoypadAxisEvent e = JoypadAxisEvent(JoypadAxisStateChanged,
-                                          event.joystick.stick,
-                                          event.joystick.axis,
-                                          event.joystick.pos);
+      JoypadAxisMessage e = JoypadAxisMessage(MessageId::JOYPAD_AXIS_STATE_CHANGED,
+                                              event.joystick.stick,
+                                              event.joystick.axis,
+                                              event.joystick.pos);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN)
     {
       InputManager_.joypadList_[0]->setButtonDown(event.joystick.button);
 
-      JoypadEvent e = JoypadEvent(JoypadStateChanged,
-                                  event.joystick.button,
-                                  true);
+      JoypadMessage e = JoypadMessage(MessageId::JOYPAD_STATE_CHANGED,
+                                      event.joystick.button,
+                                      true);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP)
     {
       InputManager_.joypadList_[0]->setButtonUp(event.joystick.button);
 
-      JoypadEvent e = JoypadEvent(JoypadStateChanged,
-                                  event.joystick.button,
-                                  false);
+      JoypadMessage e = JoypadMessage(MessageId::JOYPAD_STATE_CHANGED,
+                                      event.joystick.button,
+                                      false);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
     {
       InputManager_.pMouseState_->setButtonState(event.mouse.button, true);
-      MouseClickEvent e = MouseClickEvent(MouseButtonStateChanged,
-                                          (MouseButton)event.mouse.button,
-                                          event.mouse.x,
-                                          event.mouse.y,
-                                          true);
+      MouseClickMessage e = MouseClickMessage(MessageId::MOUSE_BUTTON_STATE_CHANGED,
+                                              (MouseButton)event.mouse.button,
+                                              event.mouse.x,
+                                              event.mouse.y,
+                                              true);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
     {
       InputManager_.pMouseState_->setButtonState(event.mouse.button, false);
 
-      MouseClickEvent e = MouseClickEvent(MouseButtonStateChanged,
-                                          (MouseButton)event.mouse.button,
-                                          event.mouse.x,
-                                          event.mouse.y,
-                                          false);
+      MouseClickMessage e = MouseClickMessage(MessageId::MOUSE_BUTTON_STATE_CHANGED,
+                                              (MouseButton)event.mouse.button,
+                                              event.mouse.x,
+                                              event.mouse.y,
+                                              false);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_MOUSE_AXES)
@@ -156,23 +156,23 @@ void InputManager::update()
       InputManager_.pMouseState_->setWheelX(event.mouse.w);
       InputManager_.pMouseState_->setWheelY(event.mouse.z);
 
-      MouseAxesEvent e = MouseAxesEvent(MouseAxesChanged,
-                                        event.mouse.x,
-                                        event.mouse.y,
-                                        event.mouse.w,
-                                        event.mouse.z);
+      MouseAxesMessage e = MouseAxesMessage(MessageId::MOUSE_AXES_CHANGED,
+                                            event.mouse.x,
+                                            event.mouse.y,
+                                            event.mouse.w,
+                                            event.mouse.z);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_JOYSTICK_CONFIGURATION)
     {
       al_reconfigure_joysticks();
 
-      Event e = Event(JoystickConfigurationChanged);
+      Message e = Message(MessageId::JOYSTICK_CONFIGURATION_CHANGED);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
     {
-      Event e = Event(DisplayClose);
+      Message e = Message(MessageId::DISPLAY_CLOSE);
       InputManager_.pBroadcaster_->send(&e);
     }
     else if (event.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
@@ -181,7 +181,7 @@ void InputManager::update()
 
       GraphicsProperties::setWindowSize(event.display.width, event.display.height);
 
-      Event e = Event(DisplayResize);
+      Message e = Message(MessageId::DISPLAY_CLOSE);
       InputManager_.pBroadcaster_->send(&e);
     }
   }

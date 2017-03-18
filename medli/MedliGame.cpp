@@ -18,6 +18,7 @@ MedliGame::MedliGame()
 {
   this->exit_ = false;
   this->isFixedTimeStep = true;
+  this->pBroadcaster = new Broadcaster();
   this->pDrawEngine = new DrawEngine();
   this->pResourceManager = new ResourceManager();
   this->pSceneManager = new SceneManager(this);
